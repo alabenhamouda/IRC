@@ -7,10 +7,6 @@ import java.util.Vector;
 public class ClientThread extends Thread {
     Socket s;
     Color c;
-    Vector<String> history;
-    int history_length = 50;
-    int history_cur = 0;
-    int history_reached = 0;
 
 
     ClientThread(Socket s) {
@@ -47,18 +43,18 @@ public class ClientThread extends Thread {
     }
     private synchronized String history_print() {
         String tmp = "";
-        for (var x : history) {
+        for (var x : Server.history) {
             tmp += x + "\n";
         }
         return tmp;
     }
     private synchronized void history_add_message(String msg) {
-        if (history_reached < history_length) {
-            history.add(msg);
-            history_reached++;
+        if (Server.history_reached < Server.history_length) {
+            Server.history.add(msg);
+            Server.history_reached++;
         } else {
-            history.set(history_cur, msg);
-            history_cur = (history_cur + 1) % history_length;
+            Server.history.set(Server.history_cur, msg);
+            Server.history_cur = (Server.history_cur + 1) % Server.history_length;
         }
     }
     private synchronized String show_connected() {
