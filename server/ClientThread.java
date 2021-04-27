@@ -13,14 +13,14 @@ public class ClientThread extends Thread {
             String username = dis.readUTF();
             var client = new Client(s, username);
             Server.clients.add(client);
-            sendToClients(username + " vient de se connecter");
+            sendToClients(username + " hopped in the conversation!");
             while (true) {
                 try {
                     String msg = client.listen();
                     sendToClients(username + "> " + msg);
                 } catch (Exception e) {
                     Server.clients.remove(client);
-                    sendToClients(username + " s'est deconnecte");
+                    sendToClients(username + " has disconnected");
                     break;
                 }
             }
@@ -37,7 +37,7 @@ public class ClientThread extends Thread {
             } catch (Exception e) {
                 String username = client.username;
                 Server.clients.remove(client);
-                sendToClients(username + " s'est deconnecte");
+                sendToClients(username + " has disconnected");
             }
         }
     }

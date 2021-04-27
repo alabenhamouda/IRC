@@ -7,25 +7,14 @@ public class ListenThread extends Thread {
 
     ListenThread(DataInputStream dis) { this.dis = dis; }
     public void run() {
-        boolean promptWritten = false;
         while (true) {
             try {
                 String notif = dis.readUTF();
-                String str = Client.prompt + Client.buffer.toString();
-                if (promptWritten) {
-                    for (int i = 0; i < str.length(); i++) {
-                        System.out.print('\b');
-                    }
-                }
+                Client.clearLine();
                 System.out.print(notif);
-                int len = notif.length();
-                while (len < str.length()) {
-                    System.out.print(' ');
-                    len++;
-                }
                 System.out.println();
                 System.out.print(Client.prompt + Client.buffer);
-                promptWritten = true;
+                Client.promptWritten = true;
             } catch (Exception e) {
                 System.out.println("Connection Lost");
                 break;
