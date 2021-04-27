@@ -7,7 +7,9 @@ public class ClientThread extends Thread {
     Socket s;
     Color c;
 
-    ClientThread(Socket s) { this.s = s; }
+    ClientThread(Socket s) {
+        this.s = s;
+    }
 
     public void run() {
         try (var dis = new DataInputStream(s.getInputStream())) {
@@ -16,6 +18,15 @@ public class ClientThread extends Thread {
             Server.clients.add(client);
             c = Palette.getColor();
             sendToClients(username + " hopped in the conversation!");
+            // displays connected users only to a newly connected user
+            client.send("connected users: ");
+            String tmp = "";
+            for (var tmp_client : Server.clients) {
+                tmp += tmp_client.username + " ";
+            }
+            client.send(tmp);
+
+            //lisetener
             while (true) {
                 try {
                     String msg = client.listen();
