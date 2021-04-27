@@ -11,7 +11,16 @@ public class Client {
     static String ttyConfig;
 
     public static void main(String[] args) {
-        try (var s = new Socket("localhost", 8000);
+        String host;
+        int port;
+        if (args.length > 2) {
+            host = args[0];
+            port = Integer.parseInt(args[1]);
+        } else {
+            host = "localhost";
+            port = 8000;
+        }
+        try (var s = new Socket(host, port);
              var dis = new DataInputStream(s.getInputStream());
              var dos = new DataOutputStream(s.getOutputStream());
              var in = new Scanner(System.in)) {
