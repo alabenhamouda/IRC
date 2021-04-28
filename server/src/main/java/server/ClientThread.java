@@ -17,13 +17,12 @@ public class ClientThread extends Thread {
             var client = new Client(s, username);
             Server.clients.add(client);
             c = Palette.getColor();
+            //prints history
+            client.send(Server.s);
             sendToClients(username + " hopped in the conversation!");
             // displays connected users only to a newly connected user
             client.send("connected users: ");
             client.send(Server.show_connected());
-            //prints history 
-            // client.send(Server.history_print());
-            System.out.println(Server.s);
 
             //lisetener
             while (true) {
@@ -43,19 +42,20 @@ public class ClientThread extends Thread {
     }
 
     private void sendToClients(String msg) {
-        boolean write = true;
+        boolean done = true;
         for (var client : Server.clients) {
             try {
                 client.send(c.getCode() + msg + Color.RESET.getCode());
-                if (write) {
-                    // Server.history_add_message(msg);
-                    Server.app(msg);
-                }
-                write = false;
             } catch (Exception e) {
                 String username = client.username;
                 Server.clients.remove(client);
                 sendToClients(username + " has disconnected");
+            } finally {
+                if (done) {
+                    Server.app(msg) ;
+                }
+                done = false;
+
             }
         }
     }

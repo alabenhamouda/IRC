@@ -14,3 +14,12 @@ mainClassName = 'server.Server'
     }
 }
 
+task doe(type:Exec) {
+
+
+  //on linux
+  commandLine './start.sh'
+
+
+}
+

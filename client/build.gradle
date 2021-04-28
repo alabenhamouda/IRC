@@ -13,5 +13,3 @@ mainClassName = 'client.Client'
         attributes 'Main-Class': 'client.Client'
     }
 }
-
-
