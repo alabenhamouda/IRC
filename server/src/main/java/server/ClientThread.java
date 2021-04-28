@@ -19,7 +19,7 @@ public class ClientThread extends Thread {
             c = Palette.getColor();
             //prints history
             // client.send(Server.s);
-            client.send(Server.history_print());
+            client.send(Server.history.print());
             sendToClients(username + " hopped in the conversation!");
             // displays connected users only to a newly connected user
             client.send("connected users: ");
@@ -54,7 +54,7 @@ public class ClientThread extends Thread {
             } finally {
                 if (done) {
                     // Server.app(msg) ;
-                    Server.history_add_message(msg);
+                    Server.history.add_message(msg);
                 }
                 done = false;
 
