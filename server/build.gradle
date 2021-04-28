@@ -4,3 +4,13 @@
  * This is a general purpose Gradle build.
  * Learn more about Gradle by exploring our samples at https://docs.gradle.org/7.0/samples
  */
+  apply plugin: 'java'
+ apply plugin: 'application'
+
+mainClassName = 'server.Server'
+ jar {
+    manifest {
+        attributes 'Main-Class': 'server.Server'
+    }
+}
+
