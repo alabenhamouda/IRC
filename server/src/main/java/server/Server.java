@@ -15,14 +15,19 @@ public class Server {
     static  int history_length = 50;
     static  int history_cur = 0;
     static  int history_reached = 0;
-    static String s = "";
-    static synchronized void app(String x) {
-        s += x + "\n";
-    }
     static synchronized String history_print() {
         String tmp = "";
-        for (int i = 0; i < history_cur; i++) {
-            tmp += history.get(i) + "\n";
+        if (Server.history_reached < Server.history_length) {
+            for (int i = 0; i < history_reached; i++) {
+                tmp += history.get(i) + "\n";
+            }
+        } else {
+            for (int i = history_cur; i < history_length; i++) {
+                tmp += history.get(i) + "\n";
+            }
+            for (int i = 0; i < history_cur; i++) {
+                tmp += history.get(i) + "\n";
+            }
         }
         return tmp;
     }
@@ -36,7 +41,7 @@ public class Server {
 
         }
     }
-    static synchronized String show_connected() {
+    static String show_connected() {
         String tmp = "";
         for (var tmp_client : Server.clients) {
             tmp += tmp_client.username + " ";
