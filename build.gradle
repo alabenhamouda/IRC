@@ -30,3 +30,15 @@ dependencies {
 }
 */
 apply plugin: 'java'
+sourceSets {
+    main {
+         java {
+              srcDir 'src'
+              }
+        }
+}
+// jar{
+    // manifest{
+        // attributes 'Main-Class': 'server.Server'
+    // }
+// }
