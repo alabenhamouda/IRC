@@ -3,19 +3,20 @@ package client;
 import java.io.*;
 
 public class ListenThread extends Thread {
-    DataInputStream dis;
+    ObjectInputStream dis;
 
-    ListenThread(DataInputStream dis) { this.dis = dis; }
+    ListenThread(ObjectInputStream dis) { this.dis = dis; }
     public void run() {
         while (true) {
             try {
-                String notif = dis.readUTF();
+                Message msg = (Message)dis.readObject();
                 Client.clearLine();
-                System.out.print(notif);
+                System.out.print(msg.msg);
                 System.out.println();
                 System.out.print(Client.prompt + Client.buffer);
                 Client.promptWritten = true;
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Connection Lost");
                 break;
             } finally {

@@ -10,6 +10,7 @@ public class Client {
     static StringBuilder buffer = new StringBuilder();
     static String ttyConfig;
     static boolean promptWritten = false;
+    static Socket sock;
 
     public static void main(String[] args) {
         String host;
@@ -21,18 +22,26 @@ public class Client {
             host = "localhost";
             port = 8000;
         }
-        try (var s = new Socket(host, port);
-             var dis = new DataInputStream(s.getInputStream());
-             var dos = new DataOutputStream(s.getOutputStream());
-             var in = new Scanner(System.in)) {
+        try {
+            sock = new Socket(host,port);
+            var in = new Scanner(System.in);
+            OutputStream outputStream = sock.getOutputStream();
+            ObjectOutputStream dos = new ObjectOutputStream(outputStream);
+
+
+            InputStream inputStream = sock.getInputStream();
+            ObjectInputStream dis = new ObjectInputStream(inputStream);
             setTerminalToCBreak();
             System.out.print("Enter your username to start the conversation: ");
             // username = in.nextLine();
             read();
             System.out.println();
+
             username = buffer.toString();
+            Message tmp = new Message(username);
             buffer.delete(0, buffer.length());
-            dos.writeUTF(username);
+            dos.writeObject(tmp);
+            System.out.println("obj sent");
             var listen = new ListenThread(dis);
             listen.start();
             var chat = new MessageThread(dos, in);
@@ -106,7 +115,7 @@ public class Client {
      *  against the current active terminal.
      */
     static String stty(final String args)
-        throws IOException, InterruptedException {
+    throws IOException, InterruptedException {
         String cmd = "stty " + args + " < /dev/tty";
 
         return exec(new String[] {"sh", "-c", cmd});
@@ -117,7 +126,7 @@ public class Client {
      *  (both stdout and stderr).
      */
     private static String exec(final String[] cmd)
-        throws IOException, InterruptedException {
+    throws IOException, InterruptedException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
         Process p = Runtime.getRuntime().exec(cmd);

@@ -6,7 +6,7 @@ import java.util.Vector;
 public class Server {
 
     static Vector<Client> clients;
-    static History history=new History();
+    static History history = new History();
 
     static {
         clients = new Vector<Client>();
@@ -24,6 +24,7 @@ public class Server {
         try (var ss = new ServerSocket(8000);) {
             while (true) {
                 Socket s = ss.accept();
+                System.out.println(s);
                 var client = new ClientThread(s);
                 client.start();
             }

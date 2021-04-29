@@ -1,22 +1,23 @@
 package server;
-
+import client.*;
 import java.io.*;
 import java.net.*;
 
 public class Client {
     Socket s;
     String username;
-    DataOutputStream dos;
-    DataInputStream dis;
+    ObjectOutputStream dos;
+    ObjectInputStream dis;
 
-    Client(Socket s, String username) throws IOException {
+    Client(Socket s,ObjectOutputStream dos,ObjectInputStream dis, String username) throws IOException {
         this.s = s;
         this.username = username;
-        dos = new DataOutputStream(s.getOutputStream());
-        dis = new DataInputStream(s.getInputStream());
+        this.dos = dos;
+        this.dis = dis;
     }
 
-    void send(String notif) throws IOException { dos.writeUTF(notif); }
+    void send(String notif) throws IOException { dos.writeObject(new Message(notif)); }
+    void send(Message notif) throws IOException { dos.writeObject(notif); }
 
-    String listen() throws IOException { return dis.readUTF(); }
+    Message  listen() throws IOException,ClassNotFoundException { return (Message)dis.readObject(); }
 }
